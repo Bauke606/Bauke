@@ -55,4 +55,5 @@ function tekenRaster() {
     }
   }
   pop();
+  for (loadImage;("images/sprites/Jos100px/Jos_0.png");)
 }
