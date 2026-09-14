@@ -50,7 +50,10 @@ var jos = {
   },
 
   wordtGeraakt(vijand) {
-    return false;
+    if (jos.x == vijand.x && jos.y == vijand.y)
+      return true
+    else 
+      return false
   },
 
   toon() {
@@ -103,6 +106,7 @@ function draw() {
   jos.beweeg();
   jos.toon();
   alice.toon();
+  alice.beweeg();
 
   if (jos.wordtGeraakt(alice)) {
     noLoop();
