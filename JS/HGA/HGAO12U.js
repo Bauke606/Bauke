@@ -39,10 +39,25 @@ var raster = {
     this.aantal++;
   },
   
-  controleerRaak(mx,my,k,r) {
+  controleerRaak(mx,my,k,r){
+  var result = true
+  var mk = floor(mx / this.grootte)
+  var mr = floor(my / this.grootte)
+
+  if (mx == k && my == r)
+    return result ;
+  else
     return false;
   },
+
+  controleerMuisbinnenraster(){
+    if(mx <= this.Nrij & my <= this.Nkolom )
+      return true 
+    else return false
+  },
   
+
+ 
   tekenStip(x,y) {
     var str = 15;
     push();
