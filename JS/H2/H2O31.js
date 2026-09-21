@@ -50,13 +50,19 @@ function setup() {
   textSize(80);
   frameRate(10);
   background('lightcyan');
-  dobbelSteen = new DobbelSteen(25);
+  dob1 = new DobbelSteen(25);
+  dob2 = new DobbelSteen(250);
+  dob3 = new DobbelSteen(475);
 }
 
 function draw() {
   if (mouseIsPressed) {
-    dobbelSteen.gooi();
+    dob1.gooi();
+    dob2.gooi();
+    dob3.gooi();
     background('lightcyan');
-    dobbelSteen.teken();
+    dob1.teken();
+    dob2.teken();
+    dob3.teken();
   }
 }
