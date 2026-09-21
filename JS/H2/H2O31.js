@@ -1,12 +1,16 @@
-var dobbelSteen = {
-  x: 25,
-  y: 25,
-  grootte: 200,
-  diameterOgen: 50,
-  ogen: null,
-  R: null,
-  G: null,
-  B: null,
+class DobbelSteen {
+
+  constructor(x) {
+    this.x = x;
+    this.y = 25;
+    this.grootte = 200;
+    this.diameterOgen = 50;
+    this.ogen = null;
+    this.R = null;
+    this.G = null;
+    this.B = null;
+    
+  }
 
   gooi() {
     this.ogen = floor(random(0,6)) + 1;
@@ -14,7 +18,7 @@ var dobbelSteen = {
     this.R = round(random(0,255));
     this.G = round(random(0,255));
     this.B = round(random(0,255));
-  },
+  }
   
   teken() {
     push();
@@ -35,6 +39,8 @@ var dobbelSteen = {
   }
 }
 
+var dobbelSteen;
+
 function setup() {
   canvas = createCanvas(700,300);
   canvas.parent('processing');
@@ -44,6 +50,7 @@ function setup() {
   textSize(80);
   frameRate(10);
   background('lightcyan');
+  dobbelSteen = new DobbelSteen(25);
 }
 
 function draw() {
