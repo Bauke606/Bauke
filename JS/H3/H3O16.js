@@ -48,7 +48,7 @@ class Unlocker {
     this.grootte = grootte;
     this.marge = marge;
     this.code = code;
-    this.ingevoerdeCode = [0,0,0,0,0,0,0,0,0];
+    this.ingevoerdeCode = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     this.invoerNummer = 1;
     this.invoer = [];
     this.maakInvoer();
@@ -58,7 +58,7 @@ class Unlocker {
     var x = this.marge;
     var y = -this.grootte;
     for (var c = 0;c < this.code.length;c++) {
-      if (c % 3 == 0) {
+      if (c % 4 == 0) {
         x = this.marge;
         y += this.grootte + this.marge;
       }
@@ -107,13 +107,14 @@ class Unlocker {
     ********************************************************** */
 
 
-var patroon = [1,0,5,
-               0,2,4,
-               0,0,3];
+var patroon = [1,0,0,7,
+               2,0,6,8,
+               3,5,0,9,
+               4,0,0,10];
 
-var grootte = 100;
-var marge = 30;
-var lCanvas = 4 * marge + 3 * grootte;
+var grootte = 80;
+var marge = 20;
+var lCanvas = 5 * marge + 4 * grootte;
 
 function setup() {
   // initialisatie
