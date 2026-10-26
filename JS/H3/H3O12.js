@@ -12,6 +12,7 @@ class Racket {
     this.x = canvas.width / 2 - 0.5 * this.breedte;
     this.y = canvas.height - 2 * this.hoogte;
     this.kleur = 255;
+    this.metEffect = false;
   }
   
   teken() {
@@ -55,7 +56,7 @@ class Tennisbal {
     this.y = this.straal;
     this.basissnelheid = 5;
     this.snelheidX = random(1,this.basissnelheid);
-    this.snelheidY = random(1,this.basissnelheid);
+    this.snelheidY = this.basissnelheid;
     this.kleur = 0;
     this.factor = 1;
   }
@@ -70,15 +71,17 @@ class Tennisbal {
   }
   
   reageerOpRacket(r) {
-    this.snelheidY *= -1;
+    this.snelheidY *= -1.1;
+    this.snelheidY = constrain(this.snelheidY,-40,40);
     this.y = r.y - this.straal;
-    
-    /* 
-    this.factor = -4 * ((r.x + 0.5 * r.breedte) - this.x) / r.breedte;
-    this.factor = round(100 * this.factor)/100;
-    this.snelheidX = this.basissnelheid * this.factor;    
-    */
-    
+    if (r.metEffect) {
+      this.factor = -4 * ((r.x + 0.5 * r.breedte) - this.x) / r.breedte;
+      this.factor = round(100 * this.factor)/100;      
+      this.snelheidX = this.basissnelheid * this.factor;       
+    }
+    else {
+      this.factor = 1;
+    }
   }
   
   beweeg() {
@@ -173,6 +176,18 @@ function draw() {
 function keyTyped() {
   if (!spel.actief && keyCode == 32) {
     spel.actief = true;
+  }
+  else {
+    if (keyCode == ENTER) {
+      if (spel.r.metEffect) {
+        spel.r.kleur = 'white';
+        spel.r.metEffect = false;
+      }
+      else {
+        spel.r.kleur = 'orange';
+        spel.r.metEffect = true;
+      }      
+    }    
   }
 }
 
