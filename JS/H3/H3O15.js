@@ -51,11 +51,9 @@ function draw() {
   for (var c = 0; c < cirkels.length; c++) {
     cirkels[c].beweeg();
     cirkels[c].teken();
-    /*
     if (cirkels[c].y > canvas.height + cirkels[c].diameter / 2) {
       cirkels.splice(c,1);
     }
-    */
   }
   fill(255);
   textSize(60);
