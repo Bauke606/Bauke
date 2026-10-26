@@ -8,7 +8,6 @@ class Racket {
   constructor() {
     this.breedte = 150;
     this.hoogte = 20;
-    this.snelheid = 10;
     this.x = canvas.width / 2 - 0.5 * this.breedte;
     this.y = canvas.height - 2 * this.hoogte;
     this.kleur = 255;
@@ -32,14 +31,13 @@ class Racket {
     }
   }
   
-  beweeg() {
-    if (key == 'a') {
-      this.x -= this.snelheid;
+  raaktMuis(mx,my) {
+    if (mx > this.x && mx < this.x + this.breedte && my > this.y && my < this.y + this.hoogte) {
+      return true;
     }
-    if (key == 'd') {
-      this.x += this.snelheid;
+    else {
+      return false;
     }
-    this.x = constrain(this.x,0,canvas.width - this.breedte);
   }
 }
 
@@ -106,13 +104,14 @@ class Tennis {
     this.r = racket;
     this.b = bal;
     this.actief = false;
+    this.afgelopen = false;
   }
   
   beginScherm() {
     push();
     textAlign(CENTER,CENTER);
     fill(0);
-    text("Dit is een simpel tennis-spel. Bestuur je racket met de a (links) en de d (rechts).\n\nDruk op de spatiebalk om het spel te starten.",0,0,canvas.width,canvas.height);
+    text("Dit is een simpel tennis-spel. Bestuur je racket door deze met je muis te slepen.\nSchakel het spelen met effect in of uit met je muiswiel.\n\nKlik om het spel te starten.",0,0,canvas.width,canvas.height)
     pop();
   }
   
@@ -126,11 +125,13 @@ class Tennis {
   
   update() {
     if (spel.actief) {
-      this.r.beweeg();
       if (this.r.raaktBal(this.b)) {
         this.b.reageerOpRacket(this.r);
       }
       this.b.beweeg();
+      if (this.b.y > canvas.height + this.b.straal) {
+        this.afgelopen = true;
+      }      
     }
   }
   
@@ -146,7 +147,7 @@ class Tennis {
       this.b.teken();
       this.r.teken();
       text("botsingsfactor:"+this.b.factor,20,50);
-      if (this.b.y > canvas.height + this.b.straal) {
+      if (this.afgelopen) {
         this.eindScherm();
       }
     }
@@ -173,22 +174,35 @@ function draw() {
   spel.teken();
 }
 
-function keyTyped() {
-  if (!spel.actief && keyCode == 32) {
+function mousePressed() {
+  if (!spel.actief) {
     spel.actief = true;
   }
-  else {
-    if (keyCode == ENTER) {
-      if (spel.r.metEffect) {
-        spel.r.kleur = 'white';
-        spel.r.metEffect = false;
-      }
-      else {
-        spel.r.kleur = 'orange';
-        spel.r.metEffect = true;
-      }      
-    }    
+  if (spel.afgelopen) {
+    spel.r.kleur = 'red';
+    setup();
   }
+}
+
+function mouseDragged() {
+  if (spel.r.raaktMuis(mouseX,mouseY)) {
+    spel.r.x = mouseX - spel.r.breedte / 2;
+    spel.r.x = constrain(spel.r.x,0,canvas.width - spel.r.breedte);
+  }
+}
+
+function mouseWheel() {
+  if (spel.r.metEffect) {
+    spel.r.kleur = 'white';
+    spel.r.metEffect = false;
+  }
+  else {
+    spel.r.kleur = 'orange';
+    spel.r.metEffect = true;
+  }  
+  // return false voorkomt dat je browserscherm gaat scrollen
+  
+  return false;
 }
 
 /*  **********************************************************
