@@ -1,239 +1,167 @@
 
 /*  **********************************************************
-    **              BEGIN klasse kleurCode                  **
+    **                BEGIN klasse Speler                   **
     ********************************************************** */
 
 
-class kleurCode {
-  constructor(reeks,k) {
-  this.kleuren = k;
-  this.code = reeks;
-  this.geraden = new Array(false,false,false,false);
+class Speler {
+  constructor(n) {
+    this.naam = n;
+    this.laatsteGok = null;
+    this.budget = null;
   }
 
-  teken() {
-    push();
-    noStroke();
-    for (n = 0;n < this.code.length;n++) {
-      if (this.geraden[n]) {
-        fill(this.kleuren[this.code[n]]);
-      }
-      else {
-        fill('black');
-      }
-      ellipse(0,0,50,50);
-      translate(60,0);
+  geefInvoer() {
+    // kies een getal
+
+    if (key >= 1 && key <= 6) {
+      this.laatsteGok = key;
+      spel.controleerInvoer();
     }
-    pop();
   }
 }
 /*  **********************************************************
-    **  EINDE klasse kleurCode   BEGIN klasse kleurInvoer   **
+    **   EINDE klasse Speler   BEGIN klasse Dobbelsteen     **
     ********************************************************** */
 
 
-class kleurInvoer {
-  constructor(x,k) {
-    this.x = 400 + 60 * x;
-    this.y = 30;
-    this.kleur = k;    
-    this.diameter = 50;
-  }
-  
-  muisOver() {
-    if (dist(this.x,this.y,mouseX,mouseY) < this.diameter / 2) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
-  
-  teken() {
-    push();
-    noStroke();
-    fill(this.kleur);
-    ellipse(this.x,this.y,this.diameter);
-    pop();    
-  }
-}
-/*  **********************************************************
-    **  EINDE klasse kleurInvoer   BEGIN klasse codeKraker  **
-    ********************************************************** */
-
-
-class codeKraker {
+class Dobbelsteen {
   constructor() {
-    this.pogingen = [];
-    this.invoerButtons = [];
-    this.opgave = [];
-    this.poging = [];
-    this.kleurenLijst = new Array('red','green','blue','purple','yellow','orange');
-    this.gekraakt = false;
-    this.genereerOpgave();
-    this.maakInvoerButtons();
-    this.actief = false;
+  this.x = 275;
+  this.y = 225;
+  this.grootte = 150;
+  this.diameterOgen = 40;
+  this.ogen = null;
+  this.R = null;
+  this.G = null;
+  this.B = null;
   }
-  
-  maakInvoerButtons() {
-    for (var k = 0;k < this.kleurenLijst.length;k++) {
-      this.invoerButtons.push(new kleurInvoer(k,this.kleurenLijst[k]));
-    }    
+  gooi() {
+    this.ogen = floor(random(0,6)) + 1;
+
+    this.R = round(random(0,255));
+    this.G = round(random(0,255));
+    this.B = round(random(0,255));
   }
-  
-  genereerOpgave() {
-    for (var o = 0;o < 4;o++) {
-      this.opgave[o]=floor(random(0,6));
-    }
-    this.pogingen.push(new kleurCode(this.opgave,this.kleurenLijst));    
-  }
-  
-  registreerInvoer() {
-    for (var i = 0;i < this.invoerButtons.length;i++) {
-      if (this.invoerButtons[i].muisOver()) {
-        this.poging.push(i);
-      }
-    }
-  }
-  
+
   teken() {
+    push();
+    fill(this.R,this.G,this.B);
+    rect(this.x,this.y,this.grootte,this.grootte);
+
+    fill('white');
+    if (this.ogen != 1) {ellipse(this.x + this.grootte / 6 * 1,this.y + this.grootte / 6 * 1,this.diameterOgen,this.diameterOgen);}
+    if (this.ogen == 6) {ellipse(this.x + this.grootte / 6 * 3,this.y + this.grootte / 6 * 1,this.diameterOgen,this.diameterOgen);}
+    if (this.ogen > 3) {ellipse(this.x + this.grootte / 6 * 5,this.y + this.grootte / 6 * 1,this.diameterOgen,this.diameterOgen);}
+    if (this.ogen == 1 || this.ogen == 3 || this.ogen == 5) {ellipse(this.x + this.grootte / 6 * 3,this.y + this.grootte / 6 * 3,this.diameterOgen,this.diameterOgen);}
+    if (this.ogen > 3) {ellipse(this.x + this.grootte / 6 * 1,this.y + this.grootte / 6 * 5,this.diameterOgen,this.diameterOgen);}
+    if (this.ogen == 6) {ellipse(this.x + this.grootte / 6 * 3,this.y + this.grootte / 6 * 5,this.diameterOgen,this.diameterOgen);}
+    if (this.ogen != 1) {ellipse(this.x + this.grootte / 6 * 5,this.y+this.grootte / 6 * 5,this.diameterOgen,this.diameterOgen);}
+    pop();
+  }
+}
+/*  **********************************************************
+    **   EINDE klasse Dobbelsteen   BEGIN klasse Gokspel    **
+    ********************************************************** */
+
+
+class Gokspel {
+  constructor(s,d) {
+    this.speler = s;
+    this.beginBudget = 5;
+    this.speler.budget = null;
+    this.beloningGoed = 5;
+    this.strafFout = 1;
+    this.steen = d;
+    this.actief = null;
+  }
+
+  nieuw() {
+    this.actief = false;
+    this.speler.laatsteGok = null;
+    this.speler.budget = this.beginBudget;
+    this.teken();
+  }
+
+  controleerInvoer() {
+    // mag deze invoer?
+
     if (!this.actief) {
-      this.beginscherm();
+      this.actief = true;
+    }
+
+    if (this.speler.budget > 0) {
+      this.verwerkInvoer();
+      this.teken();
+    }
+  }
+
+  verwerkInvoer() {
+    // verwerk de invoer
+
+    this.steen.gooi();
+    if (this.speler.laatsteGok == this.steen.ogen) {
+      this.speler.budget += this.beloningGoed;
     }
     else {
-      background('grey');
-      if (this.poging.length == 4) {
-        this.voegVolledigePogingToe();
-        this.controleerPoging();
-        this.tekenOpgave();
-        if (this.gekraakt || this.pogingen.length == 6) {
-          spel.actief = false;
-          this.eindscherm();
-        }
-      }
-      else {
-        this.tekenInvoer();
-      } 
-      this.tekenOpgave();
-      this.tekenButtons();
-      this.tekenPogingen();
+      this.speler.budget -= this.strafFout;
+    }
+    if (this.speler.budget <= 0) {
+      this.actief = false;
     }
   }
-  
-  tekenButtons() {
-    for (var i = 0;i < this.invoerButtons.length;i++) {
-      this.invoerButtons[i].teken();
-    }
-  }
-  
-  tekenOpgave() {
-    push();
-    translate(30,30);
-    this.pogingen[0].teken();
-    translate(0,70);
-    fill('black');
-    rect(-25,-40,230,10);
-    pop();    
-  }
-  
-  tekenInvoer() {
+
+  teken() {
+    // teken de speltoestand
+
     push();
     noStroke();
-    translate(420,height/2);
-    for (var p = 0;p < this.poging.length;p++) {
-      fill(this.kleurenLijst[this.poging[p]]);
-      ellipse(130*p,0,100);
+    textFont("Courier");
+    textAlign(CENTER,CENTER);
+    textSize(40);
+    background('firebrick');
+    fill('white');
+    if (!this.actief && this.speler.laatsteGok == null) {
+      textSize(20);
+      text("Dit is een gokspelletje waarbij je moet raden hoeveel er wordt gegooid met een dobbelsteen.\nJe begint met een budget van "+this.speler.budget+". Raad je het goed, dan krijg je er "+this.beloningGoed+" bij. Gok je fout dan kost dat "+this.strafFout+" op je budget. \nBegin het spel door 1, 2, 3, 4, 5 of 6 te kiezen.",0,0,canvas.width,canvas.height / 2);
+    }
+    if (this.actief) {
+      background('forestgreen');
+      text("Jij gokte "+this.speler.laatsteGok+" en het werd "+this.steen.ogen+"\njouw budget:"+this.speler.budget,0,0,canvas.width,canvas.height / 2);
+      this.steen.teken();
+    }
+
+    if (this.speler.budget == 0) {
+      text("Jammer, "+this.speler.naam+" :(\nDruk SPATIE voor nieuw spel",0,0,canvas.width,300);
+      this.steen.teken();
     }
     pop();
   }
-  
-  tekenPogingen() {
-    push();
-    translate(30,100);
-    for (var p = 1;p < this.pogingen.length;p++) {
-      this.pogingen[p].teken();
-      translate(0,60);
-    }
-    pop();    
-    }
-    
-    voegVolledigePogingToe() {
-      this.pogingen.push(new kleurCode(this.poging,this.kleurenLijst));      
-    }
-    
-    controleerPoging() {
-      var gelijk = 0;
-        for (var p = 0;p < this.poging.length;p++) {
-          if (this.pogingen[0].code[p] == this.pogingen[this.pogingen.length-1].code[p]) {
-            this.pogingen[this.pogingen.length-1].geraden[p] = true;
-            gelijk++;
-          }
-        }
-        if (gelijk == 4) {
-          this.gekraakt = true;
-        }
-        this.poging = [];
-    }
-
-
-    beginscherm() {
-      push();
-      noStroke();
-      textFont("Courier");
-      textAlign(CENTER,CENTER);
-      textSize(40);
-      background('steelblue');
-      fill('white');
-      text("Welkom bij Codekraker.\n\nKlik met je muis om te beginnen.",0,0,canvas.width,canvas.height / 2);
-    }
-
-    eindscherm() {
-      if (this.gekraakt) {
-        var kleur = 'darkgreen'
-        var tekst = 'GEWONNEN :)';
-      }
-      else {
-        var kleur = 'indianred'
-        var tekst = 'VERLOREN :(';       
-      }
-      background(kleur);
-      for (var p = 0;p < 4;p++) {
-        this.pogingen[0].geraden[p] = true;
-      }
-      this.tekenPogingen();
-      this.tekenOpgave();
-      
-      textAlign(CENTER,CENTER);
-      textSize(60);
-      fill('white');
-      text(tekst,canvas.width/2,0,canvas.width/2,canvas.height);
-    }
 }
 /*  **********************************************************
-    **   EINDE klasse codeKraker    BEGIN hoofdprogramma    **
+    **      EINDE klasse Gokspel  BEGIN hoofdprogramma      **
     ********************************************************** */
 
+var canvas;
 
 function setup() {
-  canvas = createCanvas(740,400);
+  // initialisatie
+
+  canvas = createCanvas(700,400);
+  canvas = canvas;
   canvas.parent('processing');
-  spel = new codeKraker();
+  speler = new Speler('Ron');
+  steen = new Dobbelsteen();
+  spel = new Gokspel(speler,steen);
+  spel.nieuw();
   spel.teken();
 }
 
-function mousePressed() {
-  if (!spel.actief) {
-    if (spel.pogingen.length == 1) {
-      spel.actief = true;
-    }
-    else {
-      setup();
-    }
+function keyTyped() {
+  spel.speler.geefInvoer();
+  if (spel.speler.budget <= 0 && keyCode == 32) {
+    spel.nieuw();
   }
-  else {
-    spel.registreerInvoer();
-  }
-  spel.teken();  
 }
 /*  **********************************************************
     **               EINDE hoofdprogramma                   **
