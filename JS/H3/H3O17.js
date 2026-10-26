@@ -33,9 +33,6 @@ class Auto {
       rect(this.l*3/5,0,this.l/5,this.l/10);
       rect(this.l/5,this.l-this.l/10,this.l/5,this.l/10);
       rect(this.l*3/5,this.l-this.l/10,this.l/5,this.l/10);
-      fill(255);
-      textSize(10);
-      text(this.x+' '+this.y,0,0,this.l,this.l);
       pop();
   }
 
@@ -51,15 +48,13 @@ class Cel {
     this.y = y;
     this.l = l;
     this.kleur = 0;
-    this.tekstKleur = 127;
   }
 
   wordtGeraakt(s) {
-    if (s.x > this.x) {
-      this.tekstKleur = 'orange';
-    }
-    else {
-      this.tekstKleur = 127;
+    if (s.x + s.l > this.x && s.x < this.x + this.l && s.y + s.l > this.y && s.y < this.y + this.l) {
+      if (this.kleur == 0) {
+        return true;
+      }
     }
     return false;
   }
@@ -69,8 +64,6 @@ class Cel {
     fill(this.kleur);
     noStroke();
     rect(this.x,this.y,this.l,this.l);
-    fill(this.tekstKleur);
-    text(this.x+' '+this.y,this.x,this.y,this.l,this.l);
     pop();
   }
 }
@@ -152,12 +145,16 @@ class Racer {
 
 
 var rooster = [];
-var patroon = [1,1,0,0,0,0,0,
-               0,1,0,1,1,1,0,
-               0,1,1,1,0,1,0,
-               0,0,0,0,0,1,1];
+var patroon = [1,1,0,0,0,0,0,0,0,0,0,0,0,0,
+               1,1,0,1,1,1,0,0,0,0,1,1,1,0,
+               1,1,1,1,0,1,0,1,1,1,1,0,1,0,
+               0,0,0,0,0,1,0,1,1,0,0,1,1,0,
+               0,1,1,1,0,1,0,1,1,0,0,1,0,0,
+               0,1,0,1,1,1,0,1,1,1,0,1,0,0,
+               0,1,0,0,0,0,0,0,0,1,0,1,1,1,
+               0,1,1,1,1,1,1,1,1,1,0,1,1,0];
 
-var grootte = 100;
+var grootte = 50;
 
 function setup() {
   // initialisatie
