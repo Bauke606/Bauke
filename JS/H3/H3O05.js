@@ -29,7 +29,8 @@ class Galgje {
     this.maximaalAantalBeurten = 10;
     this.speler.resterendeBeurten = this.maximaalAantalBeurten;
     this.beeldjes = b;
-    this.woord = 'intolerantie';
+    this.woordenLijst = new Array('een','twee','drie','vier','vijf','zes');
+    this.woord = this.woordenLijst[floor(random(0,this.woordenLijst.length))];
     this.letters = [];
     this.geraden = [];
     this.pogingen = [];
@@ -124,6 +125,10 @@ class Galgje {
       fill('green');
       text("Goed gedaan, "+this.speler.naam,0,100,canvas.width,300);
     }
+    else {
+      fill('orange');
+      text(speler.resterendeBeurten,canvas.width - 50,canvas.height - 50);
+    }
     pop();
   }
 }
@@ -154,6 +159,11 @@ function setup() {
 
 function keyTyped() {
   spel.speler.kiesLetter();
+  if (spel.woordIsGeraden() || spel.speler.resterendeBeurten == 0) {
+    if (keyCode == 32) {
+      setup();
+    }
+  }
 }
 /*  **********************************************************
     **               EINDE hoofdprogramma                   **
