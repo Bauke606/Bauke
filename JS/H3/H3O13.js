@@ -68,7 +68,7 @@ function setup() {
   fill('black');
   c1 = new Cirkel(canvas.width / 3, canvas.height / 4);
   c2 = new Cirkel(canvas.width * 2 / 3, 3 * canvas.height / 4);
-  frameRate(5);
+  frameRate(10);
 }
 
 function draw() {
@@ -80,8 +80,17 @@ function draw() {
   
   // Schakel onderstaande regels in om het programma makkelijker te kunnen testen
 
-  // tekst='c1:'+c1.snelheid+' '+c1.diameter+' '+c1.x+'\n'+'c2:'+c2.snelheid+' '+c2.diameter+' '+c2.x;
-  // text(tekst,0,0,canvas.width,canvas.height);  
+  tekst='c1:'+c1.snelheid+' '+c1.diameter+' '+c1.x+'\n'+'c2:'+c2.snelheid+' '+c2.diameter+' '+c2.x;
+  text(tekst,0,0,canvas.width,canvas.height);  
+  
+  if (c1.x == c2.x && c1.snelheid == c2.snelheid && c1.diameter == c2.diameter) {
+    background('green');
+    textAlign(CENTER,CENTER);
+    textSize(80);
+    fill('white');
+    text('gelukt!',0,0,canvas.width,canvas.height);
+    noLoop();
+  }
 }
 
 function mousePressed() {
