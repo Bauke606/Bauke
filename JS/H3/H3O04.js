@@ -54,17 +54,24 @@ class Galgje {
 
   verwerkInvoer() {
     // verwerk de invoer
-
-    this.pogingen.push(key);
-    var letterZitInWoord = false;
-    for (var l = 0;l < this.letters.length;l++) {
-      if (this.letters[l] == key) {
-        letterZitInWoord = true;
-        this.geraden[l] = true;
+    var letterIsAlGeprobeerd = false;
+    for (var g = 0; g < this.pogingen.length; g++) {
+      if (this.pogingen[g] == key) {
+        letterIsAlGeprobeerd = true;
       }
     }
-    if (!letterZitInWoord) {
-      this.speler.resterendeBeurten--;
+    if (!letterIsAlGeprobeerd) {
+      this.pogingen.push(key);
+      var letterZitInWoord = false;
+      for (var l = 0;l < this.letters.length;l++) {
+        if (this.letters[l] == key) {
+          letterZitInWoord = true;
+          this.geraden[l] = true;
+        }
+      }
+      if (!letterZitInWoord) {
+        this.speler.resterendeBeurten--;
+      }
     }
   }
 
@@ -87,7 +94,7 @@ class Galgje {
     textFont("Courier");
     textSize(40);
     textAlign(CENTER,CENTER);
-    var tekst="";
+    var tekst = "";
     for (var l = 0;l < this.letters.length;l++) {
       if (this.geraden[l]) {
         tekst += this.letters[l]+" ";
@@ -99,6 +106,14 @@ class Galgje {
     }
     tekst=tekst.substr(0,tekst.length-1);
     text(tekst,12,0,canvas.width,70);
+
+    var pogingtekst = "";
+    for (var p = 0; p < this.pogingen.length;p++) {
+      pogingtekst += this.pogingen[p]+" ";
+    }
+    textSize(25);
+    text(pogingtekst,12,350,canvas.width,70);
+
     image(this.beeldjes[this.maximaalAantalBeurten - this.speler.resterendeBeurten],(canvas.width-300) / 2,75,300,300);
     textSize(80);
     if (this.speler.resterendeBeurten == 0) {
