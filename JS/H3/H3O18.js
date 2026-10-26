@@ -36,7 +36,6 @@ class Vogel {
       noStroke();
       image(this.afbeelding,this.x,this.y,this.breedte,this.hoogte);
       fill(255,0,0,0.25);
-      rect(this.x + this.marge, this.y + this.marge,this.breedte - 2*this.marge,this.hoogte - 2*this.marge);
       pop();
   }
 }
@@ -102,12 +101,12 @@ class Bluebird {
     stroke(0,0,200,.8);
     strokeWeight(5);
     textSize(150);
-    text(" BLUEBIRD",0,0,canvas.width,canvas.height / 2)
+    text(" BLUEBIRD",0,0,canvas.width,canvas.height / 2);
     textSize(44);
     strokeWeight(2);
     stroke(0);
     fill(200,200,200,.5);
-    text("\nKlik met je muis om te vliegen\nen ontwijk de obstakels.\nKlik NU met je muisWIEL.\n",0,0,canvas.width,canvas.height * 2 / 3)
+    text("\nGebruik SPATIE om te vliegen\nen ontwijk de obstakels.\nDruk ENTER om te starten.\n",0,0,canvas.width,canvas.height * 2 / 3);
     pop();
   }
 
@@ -117,7 +116,7 @@ class Bluebird {
     fill(0);
     stroke('yellow');
     strokeWeight(3);
-    text(this.eindTekst+'\nKlik met je muisWIEL.\n',0,0,canvas.width,canvas.height * 1 / 3);
+    text(this.eindTekst+'\nDruk ENTER voor nieuw spel.\n',0,0,canvas.width,canvas.height * 1 / 3);
     pop();
   }
 
@@ -188,19 +187,18 @@ function draw() {
   spel.teken();
 }
 
-function mousePressed() {
-  if (!spel.actief && !(mouseButton == LEFT || mouseButton == RIGHT)) {
+function keyTyped() {
+  if (!spel.actief && keyCode == ENTER) {
     spel.actief = true;
   }
   else {
-    if (!spel.afgelopen) {
+    if (!spel.afgelopen && keyCode == 32) {
       spel.speler.vlieg();
     }
   }
-  if (spel.afgelopen && !(mouseButton == LEFT || mouseButton == RIGHT)) {
+  if (spel.afgelopen && keyCode == ENTER) {
     setup();
   }
-  return false;
 }
 
 /*  **********************************************************
