@@ -12,7 +12,7 @@ class Speler {
   }
 
   geefInvoer() {
-    // kies een getal
+    // kies een getal f
 
     if (key >= 1 && key <= 6) {
       this.laatsteGok = key;
