@@ -107,7 +107,7 @@ class Galgje {
     }
     if (this.woordIsGeraden()) {
       fill('green');
-      text("GEWONNEN :)",0,100,canvas.width,300);
+      text("Goed gedaan, "+this.speler.naam,0,100,canvas.width,300);
     }
     pop();
   }
