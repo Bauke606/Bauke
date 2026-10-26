@@ -64,6 +64,7 @@ class Cirkel {
 
 var kleurenSet = ['hotpink','deeppink','mediumvioletred','palevioletred','royalblue','cornflowerblue','skyblue','steelblue'];
 var kleurNummer = 0;
+var tekst = '';
 
 function setup() {
   // initialisatie
@@ -72,6 +73,10 @@ function setup() {
   canvas.parent('processing');
   c1 = new Cirkel(canvas.width / 2, canvas.height / 4);
   c2 = new Cirkel(canvas.width / 2, 3 * canvas.height / 4);
+  textFont("Georgia");
+  textSize(90);
+  textAlign(CENTER,CENTER);
+  fill('white');
 }
 
 function draw() {
@@ -80,10 +85,17 @@ function draw() {
   c1.teken();
   c2.beweeg2();
   c2.teken();
+  text(tekst,0,0,canvas.width,canvas.height);
 }
 
 function keyTyped() {
   kleurNummer = floor(random(0,kleurenSet.length));
+  if (c1.x == c2.x) {
+    tekst='gelukt!';
+  }
+  else {
+    tekst='c1: '+c1.x+ ' | c2: '+c2.x;
+  }
 }
 
 /*  **********************************************************
