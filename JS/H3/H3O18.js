@@ -198,7 +198,7 @@ function keyTyped() {
   }
   if (spel.afgelopen && keyCode == ENTER) {
     setup();
-  }
+  }vc
 }
 
 /*  **********************************************************
