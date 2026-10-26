@@ -159,7 +159,7 @@ function keyTyped() {
   }
   else {
     spel.speler.invoer(key);
-  }
+  }c
 }
 /*  **********************************************************
     **                EINDE hoofdprogramma                  **
