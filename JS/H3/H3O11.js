@@ -8,7 +8,7 @@ class Racket {
   constructor() {
     this.breedte = 150;
     this.hoogte = 20;
-    this.snelheid = 30;
+    this.snelheid = 10;
     this.x = canvas.width / 2 - 0.5 * this.breedte;
     this.y = canvas.height - 2 * this.hoogte;
     this.kleur = 255;
@@ -63,7 +63,7 @@ class Tennisbal {
     if (this.x<this.straal || this.x>canvas.width-this.straal) {
       this.snelheidX*=-1;
     }
-    if (this.y<this.straal || this.y>canvas.height-this.straal) {
+    if (this.y<this.straal) {
       this.snelheidY*=-1;
     }    
   }
@@ -105,8 +105,17 @@ class Tennis {
     pop();
   }
   
+  eindScherm() {
+    push();
+    textAlign(CENTER,CENTER);
+    fill(0);
+    text("HELAAS: je bent AF.",0,0,canvas.width,canvas.height);
+    pop();
+  }  
+  
   update() {
     if (spel.actief) {
+      this.r.beweeg();
       if (this.r.raaktBal(this.b)) {
         this.b.reageerOpRacket(this.r);
       }
@@ -125,6 +134,9 @@ class Tennis {
     else {
       this.b.teken();
       this.r.teken();
+      if (this.b.y > canvas.height + this.b.straal) {
+        this.eindScherm();
+      }
     }
   }
 }
@@ -152,9 +164,6 @@ function draw() {
 function keyTyped() {
   if (!spel.actief && keyCode == 32) {
     spel.actief = true;
-  }
-  else {
-    spel.r.beweeg();
   }
 }
 
